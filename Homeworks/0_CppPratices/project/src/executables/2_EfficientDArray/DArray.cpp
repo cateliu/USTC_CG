@@ -53,18 +53,27 @@ void DArray::Init() {
 // free the array
 void DArray::Free() {
 	//TODO
+	cout << "class has been released" << endl;
 	delete[] m_pData;
+
 }
 // allocate enough memory
 void DArray::Reserve(int nSize) {
-	double* m_pData_new = new double[2 * nSize];
-	for (int i = 0; i < 2 * nSize; i++)
-		if (i < m_nSize)
-			m_pData_new[i] = m_pData[i];
-		else
+	m_nMax = 2 * nSize;
+	double* m_pData_new = new double[m_nMax];
+	if (m_nSize == 0) {
+		for (int i = 0; i < nSize; i++)
 			m_pData_new[i] = 0;
+	}
+	else {
+		for (int i = 0; i < m_nMax; i++)
+			if (i < m_nSize)
+				m_pData_new[i] = m_pData[i];
+			else
+				m_pData_new[i] = 0;
+	}
+
 	m_nSize = nSize;
-	m_nMax = 2 * m_nSize;
 
 	delete[] m_pData;
 	m_pData = m_pData_new;
@@ -84,8 +93,8 @@ void DArray::SetSize(int nSize) {
 	}
 	else
 		cout << "The size is normal." << endl;
-
-	double* m_pData_new = new double[2 * nSize];
+	m_nMax = 2 * nSize;
+	double* m_pData_new = new double[m_nMax];
 	for (int i = 0; i < 2 * nSize; i++)
 		if (i < m_nSize)
 			m_pData_new[i] = m_pData[i];
@@ -94,7 +103,7 @@ void DArray::SetSize(int nSize) {
 	delete[] m_pData;
 	m_pData = m_pData_new;
 	m_nSize = nSize;
-	m_nMax = 2 * m_nSize;
+	
 }
 
 // get an element at an index
@@ -145,9 +154,11 @@ const double& DArray::operator[](int nIndex) const {
 // add a new element at the end of the array
 void DArray::PushBack(double dValue) {
 	//TODO
-	m_nSize++;
-	if (m_nSize >= m_nMax)
-		Reserve(m_nSize);
+	
+	if ((m_nSize + 1) >= m_nMax)
+		Reserve(m_nSize + 1);
+	else
+		m_nSize++;
 	m_pData[m_nSize - 1] = dValue;
 }
 
@@ -168,11 +179,18 @@ void DArray::DeleteAt(int nIndex) {
 // insert a new element at some index
 void DArray::InsertAt(int nIndex, double dValue) {
 	//TODO
-	m_nSize++;
-	if (m_nSize > m_nMax)
-		Reserve(m_nSize);
+	
+	if ((m_nSize + 1) > m_nMax) 
+	{
+		Reserve(m_nSize + 1);
+	}
+	else
+	{
+		m_nSize++;
+	}
 	if (nIndex < 0)
 		return;
+
 	if (nIndex < m_nMax && nIndex >= m_nSize) {
 		for (int i = m_nSize; i < nIndex; i++)
 			if (i == nIndex)
@@ -190,7 +208,7 @@ void DArray::InsertAt(int nIndex, double dValue) {
 				m_pData[i] = 0;
 	}
 	else if (nIndex < m_nSize) {
-		for (int i = m_nSize; i >= nIndex; i--)
+		for (int i = m_nSize - 1; i >= nIndex; i--)
 			if (i == nIndex)
 				m_pData[i] = dValue;
 			else
