@@ -138,9 +138,6 @@ void DArray::DeleteAt(int nIndex) {
 	}
 
 	for (int i = nIndex; i < m_nSize - 1 ; i++)
-		if(i == 0)
-			m_pData[0] = m_pData[1];
-		else
 			m_pData[i] = m_pData[i + 1];
 	m_nSize--;
 
