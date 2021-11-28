@@ -9,18 +9,22 @@ DArray::DArray() {
 }
 
 // set an array with default values
-DArray::DArray(int nSize, double dValue) {
+DArray::DArray(int nSize, double dValue) 
+	: m_pData(new double[nSize]), m_nSize(nSize)
+{
 	//TODO
-	m_nSize = nSize;
-	m_pData = new double[m_nSize];
+	// m_nSize = nSize;
+	// m_pData = new double[m_nSize];
 	for (int i = 0; i < m_nSize; i++)
 		m_pData[i] = dValue;
 }
 
-DArray::DArray(const DArray& arr) {
+DArray::DArray(const DArray& arr) 
+	： m_pData(new double[arr.m_nSize]), m_nSize(arr.m_nSize)
+{
 	//TODO
-	m_nSize = arr.m_nSize;
-	m_pData = new double [m_nSize];
+	// m_nSize = arr.m_nSize;
+	// m_pData = new double [m_nSize];
 	for (int i = 0 ; i < m_nSize; i ++)
 		m_pData[i] = arr.m_pData[i];
 }
@@ -33,6 +37,7 @@ DArray::~DArray() {
 // display the elements of the array
 void DArray::Print() const {
 	//TODO
+	cout << "size is " << m_nSize << endl;
 	for (int i = 0; i < m_nSize; i++) {
 		cout << i << "th address is:" << m_pData + i << endl;
 		cout << i << "th element is: " << m_pData[i] << endl;
@@ -51,6 +56,9 @@ void DArray::Init() {
 void DArray::Free() {
 	//TODO
 	delete [] m_pData;
+
+	m_pData = NULL;	//	added in 11-28
+	m_nSize = 0;	// 	added in 11-28
 }
 
 // get the size of the array
@@ -68,6 +76,7 @@ void DArray::SetSize(int nSize) {
 			m_pData_new[i] = m_pData[i];
 		else if (i >= m_nSize)
 			m_pData_new[i] = 0;
+	delete [] m_pData; // added in 11-28
 	m_pData = m_pData_new;
 	m_nSize = nSize;
 }
@@ -75,8 +84,10 @@ void DArray::SetSize(int nSize) {
 // get an element at an index
 const double& DArray::GetAt(int nIndex) const {
 	//TODO
-	static double ERROR; // you should delete this line
-	return ERROR; // you should return a correct value
+	//static double ERROR; // you should delete this line
+	//return ERROR; // you should return a correct value
+
+	return m_pData[nIndex];
 }
 
 // set the value of an element 
@@ -111,6 +122,7 @@ void DArray::PushBack(double dValue) {
 			m_pData_new[i] = m_pData[i];
 		else if(i == m_nSize - 1)
 			m_pData_new[i] = dValue;
+	delete [] m_pData;
 	m_pData = m_pData_new;
 	//m_nSize++;
 //	delete [] m_pData_new;
@@ -125,6 +137,7 @@ void DArray::DeleteAt(int nIndex) {
 			m_pData_new[i] = m_pData[i];
 		else if(i >= nIndex)
 			m_pData_new[i] = m_pData[i+1];
+	delete [] m_pData;
 	m_pData = m_pData_new;
 	m_nSize--;
 //	delete [] m_pData_new;
@@ -141,6 +154,7 @@ void DArray::InsertAt(int nIndex, double dValue) {
 			m_pData_new[i] = dValue;
 		else
 			m_pData_new[i] = m_pData[i - 1];
+	delete [] m_pData;
 	m_pData = m_pData_new;
 	m_nSize++;
 }
@@ -148,6 +162,7 @@ void DArray::InsertAt(int nIndex, double dValue) {
 // overload operator '='
 DArray& DArray::operator = (const DArray& arr) {
 	//TODO
+	delete [] m_pData;
 	double* m_pData_new = new double[arr.m_nSize];
 	m_nSize = arr.m_nSize;
 	for (int i = 0; i < m_nSize; i++)
