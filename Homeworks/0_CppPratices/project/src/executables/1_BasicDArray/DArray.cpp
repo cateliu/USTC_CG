@@ -20,7 +20,7 @@ DArray::DArray(int nSize, double dValue)
 }
 
 DArray::DArray(const DArray& arr) 
-	： m_pData(new double[arr.m_nSize]), m_nSize(arr.m_nSize)
+	: m_pData(new double[arr.m_nSize]), m_nSize(arr.m_nSize)
 {
 	//TODO
 	// m_nSize = arr.m_nSize;
@@ -131,15 +131,28 @@ void DArray::PushBack(double dValue) {
 // delete an element at some index
 void DArray::DeleteAt(int nIndex) {
 	//TODO 
-	double* m_pData_new = new double [m_nSize - 1];
-	for (int i = 0; i < m_nSize - 1; i++)
-		if(i < nIndex)
-			m_pData_new[i] = m_pData[i];
-		else if(i >= nIndex)
-			m_pData_new[i] = m_pData[i+1];
-	delete [] m_pData;
-	m_pData = m_pData_new;
+
+	if(nIndex > m_nSize){
+		cout << "index is out of range!"<<endl;
+		return;
+	}
+
+	for (int i = nIndex; i < m_nSize - 1 ; i++)
+		if(i == 0)
+			m_pData[0] = m_pData[1];
+		else
+			m_pData[i] = m_pData[i + 1];
 	m_nSize--;
+
+	// double* m_pData_new = new double [m_nSize - 1];
+	// for (int i = 0; i < m_nSize - 1; i++)
+	// 	if(i < nIndex)
+	// 		m_pData_new[i] = m_pData[i];
+	// 	else if(i >= nIndex)
+	// 		m_pData_new[i] = m_pData[i+1];
+	// delete [] m_pData;
+	// m_pData = m_pData_new;
+	// m_nSize--;
 //	delete [] m_pData_new;
 }
 
